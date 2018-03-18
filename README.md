@@ -12,3 +12,8 @@ Ongoing semester end project as part of [CS6120 - Natural Language Processing](h
 # Proposal:
 The team proposes to create an artificial code generator for a high-level language, like Python. <br>
 See [proposal.pdf](https://github.com/NischalBhatewara/NLP_project/blob/master/proposal/proposal.pdf)
+
+# Data:
+The `data/` directory is to be created in the root folder of the project. <br>
+Once the directory is created, downloaded data files from 
+[here](https://drive.google.com/drive/folders/0B14lJ2VVvtmJOTJPYWZ5RlNVNHM).
