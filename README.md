@@ -1,4 +1,5 @@
-# PNet
+# PNet (pronounced Peanut)
+PNet - short for ParseNet, is a neural network that generates Abstract Syntax Tree's in Python from Natural Language.
 
 Ongoing semester end project as part of [CS6120 - Natural Language Processing](http://www.ccs.neu.edu/home/luwang/courses/cs6120_sp2018/cs6120_sp2018.html) at Northeastern University.
 
