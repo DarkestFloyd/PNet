@@ -1,5 +1,4 @@
 \documentclass{IEEEtran}
-\usepackage{blindtext}
 \pagenumbering{gobble}
 
 \title{\textbf{PNet - ParseNet \\ \large{Progress Report}}}
@@ -57,11 +56,12 @@
         \item Base paper placeholder
         \item Vanilla seq2seq: To further illustrate the problems with HS and DJ data, we train a 
           vanilla seq2seq model in TensorFlow. Google separately provides a high-level API for 
-          the same at google/seq2seq (cite github seq2seq), under the Apache 2.0 license. 
+          the same at google/seq2seq \cite{britz2017}, under the Apache 2.0 license. 
           We run the same model without modification. \\
           As TensorFlow provides the ability to see the training process via TensorBoard, we
           stopped model training when we saw no visible improvement on the dev corpus. The model
-          trained was a BiDirectional LSTM model, with attention as described in (cite).
+          trained was a BiDirectional LSTM model, with attention as described in 
+          \cite{bahdanau2014neural}.
     \end{enumerate}
 
     \section{Experiments}
@@ -73,10 +73,12 @@
     End of humanity is near.
 
     \section{Future Word}
-
-    DO IN FUTURE!
+      Our current focus is on following two major tasks:
+      \subsection{Adding context to data}
+        We plan to add context to the data
+      \subsection{Creation of dynamic top-down recursive networks}
+        Not sure if we should do this. 
 
     \bibliographystyle{ieeetran}
     \bibliography{progress_report}
-
 \end{document}
