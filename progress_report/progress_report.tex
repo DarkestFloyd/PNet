@@ -1,0 +1,95 @@
+\documentclass{IEEEtran}
+\usepackage{blindtext}
+\pagenumbering{gobble}
+
+\title{\textbf{PNet - ParseNet \\ \large{Progress Report}}}
+
+% Nischal Mahaveer Chand
+% Varun Sundar Rabindranath
+% Sai Krishna Karanan
+\author{
+    Sai Krishna Karanam 
+    \texttt{karanam.s@husky.neu.edu}
+    \and \\
+    Nischal Mahaveer Chand 
+    \texttt{mahaveerchand.n@husky.neu.edu}
+    \and \\
+    Varun Sundar Rabindranath 
+    \texttt{rabindranath.v@husky.neu.edu}
+}
+\date{}
+
+\begin{document}
+
+    \maketitle
+
+    \section{Changes}
+
+    We have renamed the project title to PNet, our implemention of a general purpose
+    Natural Language (NL) to Abstract Syntax Tree (AST). We have looked at multiple 
+    papers and dataset. Have decided to go with base paper. 
+
+    Apart from logistics, we have been working on our dataset uptill now. The
+    xxx section describes the problems with the current data available and the changes 
+    and transformations we proposed.
+    
+    \section{Data Preprocessing}
+
+    bla bla
+
+    \section{Project Plan}
+    Our initial project plan has significanlty changed to incorporate time into the data 
+    preprocessing step mentions in (section). The current project plan is as follows:
+    For this project, we plan to have four different phases,
+    \begin{enumerate}
+        \item Phase 1: \textit{Literature Survey} [\textbf{DONE}] \\
+        \item Phase 2: \textit{Data Preprocessing and Cleaning} [\textbf{In-progress}] \\
+        \item Phase 3: \textit{PNet}
+            \begin{enumerate}
+                \item Data Input
+                \item Data Process (tokenization, etc..)
+                \item Create model
+                \item Training
+                \item Testing \\
+            \end{enumerate}
+        \item Phase 4: \textit{Evaluation on different data inputs} \\
+            Each model will be carefully evaluated and examined for potential optimizations.
+            The best model will be used for further optimization and improvement.
+    \end{enumerate}
+
+    \section{PNet}
+
+    As presented by Maxim Rabinovich et. al. \cite{rabinovich2017abstract}, PNet used a top-down
+    recursive approach for the decoding process. We have decided to work with PyTorch (cite)
+    for model creating, training, testing, and evaluation.
+
+    The basic data processing pipeline has been successfully implemented. Like most deep learning
+    based systems, we are using a parallel text corpus based data input module to feed 
+    the input NL sequence into the encoder, and the output AST sequence to the decoder during
+    training. About PTC: single source file, single target file, vocab files for both. 
+    Each line is a training example, NL from source text and AST from the target text. 
+
+    Proposed decodig process as in (cite maxim). The problem with the model is the copy
+    mechanism, for this, we plan to used a explicit copy module, based on (cite copy paper).
+    We hypothise that integrating the above mentioned copy module should impove accuracy on the
+    HS dataset.
+
+    For Djanjo dataset, bla bla bla.
+
+    \section{Experiments}
+
+    As mentioned in (section name), the data is (adj bad?). To show this, we run a seq2seq 
+    model on TensorFlow (cite). First we feed the data into the vanilla seq2seq module 
+    provided separately by Google (link to github repo). As expected, the results are not
+    impressive, confirming our need for better a data corpus. Evaluation results can be found
+    in (table ?).
+
+    \section{Proposed Plan for future phases of project}
+
+    Presently, we are in the process of building the encoder-decoder model, defining 
+    architecute and parameters in PyTorch. 
+
+    \bibliographystyle{ieeetran}
+    \bibliography{progress_report}
+
+\end{document}
