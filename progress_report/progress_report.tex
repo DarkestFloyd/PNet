@@ -1,6 +1,10 @@
 \documentclass{IEEEtran}
 \pagenumbering{gobble}
 
+% \usepackage[a4paper]{geometry}
+\usepackage{listings}
+\usepackage{multicol}
+
 \title{\textbf{PNet - ParseNet \\ \large{Progress Report}}}
 
 % Nischal Mahaveer Chand
@@ -42,7 +46,37 @@
 
     \section{Data}
 
-      \subsection{Problems with existing datasets}HS and DJ are bad. Placeholder
+      \subsection{Problems with existing datasets}
+      The comments in the Django dataset are human annotated to explicitly describe what 
+      the following line of code is. Because of this, the BLEU scores reported by the 
+      research community on the Django dataset is high. However, this is not the case in general 
+      production environment and the dataset is less useful for our task of converting natural 
+      language comments to code. \\
+      \hspace*{4mm}Marceli Barone et. al. (cite) also critiques about the django dataset on 
+      similar lines. \\
+
+      \hspace*{-4mm}Consider the following example from the Django dataset:
+      \begin{lstlisting}[frame=single,basicstyle=\small]
+comment:
+  raise and exception InvalidCacheBackendError 
+  with string "Could not find config for '\%s' 
+  in settings.CACHES" as argument , replace ' 
+  \%s ' with alias .
+
+code:
+  araise InvalidCacheBackendError ( "Could not 
+  find config for '\%s' in settings.CACHES" \% 
+  alias )
+
+                  Example 1
+      \end{lstlisting}
+
+      As we can see, programmers are very unlikely to write such elaborate comments, 
+      and learning from such input pairs, while making it feasible to achieve high 
+      BLEU and accuracy scores, is not very useful for automatic code generation  
+      in production environments
+
+
 
       \subsection{Data gathering} Scrape from web.
 
@@ -81,4 +115,5 @@
 
     \bibliographystyle{ieeetran}
     \bibliography{progress_report}
+
 \end{document}
