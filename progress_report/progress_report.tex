@@ -29,10 +29,10 @@
     \section{Changes}
 
     We have changed the datasets used for our task of convertin natural language comments to 
-    source code. As mentioned in the 
-    Edinburgh paper \cite{barone2017}, the Hearthstone and Django datasets, are not generalizable and
-    would not be the right data to use for the task (Discussed more elaborately in Data). As a result, we decided to scrape our own data from open-source python repositories with guidance from
-    \cite{barone2017}.
+    source code. As mentioned in the Edinburgh paper \cite{barone2017}, the Hearthstone and 
+    Django datasets, are not generalizable and would not be the right data to use for the task 
+    (Discussed more elaborately in Data). As a result, we decided to scrape our own data from 
+    open-source python repositories with guidance from \cite{barone2017}.
 
     \section{Revised Project Plan}
     Due to the important task of gathering our own data for the task, the data creation and 
@@ -78,12 +78,11 @@ code:
       in production environments
 
       \subsubsection{Hearthstone (HS)}
-The Hearthstone dataset contains a single template of code. The comment-code                                                                                      
-        pairs used to train and test generate only a single template of code, which                                                                                        
-        is far from the case in general production environment. Because of this,                                                                                          
-        the BLEU score reported on the Hearthstone dataset is high.                                                                                        
-        \cite{barone2017} also critiques about the HearthStone dataset on 
-      similar lines.
+        The Hearthstone dataset contains a single template of code. The comment-code
+        pairs used to train and test generate only a single template of code, which
+        is far from the case in general production environment. Because of this,
+        the BLEU score reported on the Hearthstone dataset is high. \cite{barone2017} also 
+        critiques about the HearthStone dataset on similar lines.
 
       \begin{lstlisting}[frame=single,basicstyle=\scriptsize]
 card details:
@@ -114,18 +113,18 @@ correspoding code:
                           Example 2
       \end{lstlisting}
 
-      The dataset is full of such descriptions. Models trained on this dataset                                                                                        
-       typically cannot work on any other input description. Hence clearly not                                                                                         
-        suitable for converting production time comments to code.
+      The dataset is full of such descriptions. Models trained on this dataset
+      typically cannot work on any other input description. Hence clearly not
+      suitable for converting production time comments to code.
 
       \subsubsection{Edinburgh}
-To overcome the shortcomings of the Django and Hearthstone datasets as                                                                                            
-        described above, the \cite{barone2017} proposed a dataset of                                                                                             
-        docstring-code pairs (here after referred to as "Edinburgh dataset") that                                                                                         
-        they scraped from open source python repositories. The docstring-code                                                                                             
-        pairs actually reflect the comments written in production environment. However,                                                                                          
-        the docstring reflects what a particular entity (method, class, function etc.)                                                                                    
-        represents rather than how it is implemented. Unfortunately, for generating                                                                                       
+        To overcome the shortcomings of the Django and Hearthstone datasets as
+        described above, the \cite{barone2017} proposed a dataset of
+        docstring-code pairs (here after referred to as "Edinburgh dataset") that 
+        they scraped from open source python repositories. The docstring-code   
+        pairs actually reflect the comments written in production environment. However,
+        the docstring reflects what a particular entity (method, class, function etc.)
+        represents rather than how it is implemented. Unfortunately, for generating
         source code we need information on implemention logic. \\
       \begin{lstlisting}[frame=single,basicstyle=\scriptsize]
 comment:
@@ -156,11 +155,11 @@ code:
                           Example 3
       \end{lstlisting}
 
-       Given such a small description, there is no way an automatic code                                                                                           
-            generation system will be able to generate the target code without                                                                                          
-            additional information; Therefore, we conclude that code-docstring                                                                                          
-           pairs are also not ideal for out task of generation source code from the                                                                                         
-           comment/description
+      Given such a small description, there is no way an automatic code
+      generation system will be able to generate the target code without
+      additional information; Therefore, we conclude that code-docstring
+      pairs are also not ideal for out task of generation source code from the
+      comment/description.
 
       \subsection{Data gathering}
         To overcome the shortcomings of the aforementioned datasets, we build a new
@@ -168,16 +167,6 @@ code:
         and parsed the .py files to get all the comment-code pairs. We
         were able to generate 200K code-comment pairs.
 
-        % For the code in every comment-code pair, we must be able to parse the
-        % code to an abstract syntax tree(AST) and unparse the same, back to
-        % the correct code. We use the ``ast'' python module to parse python code and
-        % the ``codegen'' python module to unparse the AST back to source code.
-        % This is a requirement, as we canonicalize (the process of removing project specific 
-        % references/identifiers from the code) the code in the data preprocessing stage. We
-        % Due the incapability of the codegen
-        % python module to reliably generate code from an AST for more than half
-        % of our comment-code pairs, our resulting number comment-code pairs
-        % reduced to ~73K.
       \subsection{Data preprocessing}
       \subsubsection{Enforcing Constraints}
         Consider only the comment-code pairs, where the code span is less
@@ -202,13 +191,13 @@ code:
         Given syntactic information, we believe the model will learn such associations.
 
     \subsection{Canonicalization}
-    The raw comment-code pairs, have many project specific information                                                                                              
-          (variable names, class names, function names etc.). We consider this                                                                                            
-          information as noise as it would not contribute to learning the                                                                                                 
-          general structure of the program. However the types of all those variables                                                                                      
-          is very important information. During canonicalization, we replace every                                                                                        
-          reference to an identifier by the type of that identifier. Since Python                                                                                         
-          is dynamically typed, we extract these type information using hand-written rules.
+    The raw comment-code pairs, have many project specific information
+    (variable names, class names, function names etc.). We consider this
+    information as noise as it would not contribute to learning the
+    general structure of the program. However the types of all those variables
+    is very important information. During canonicalization, we replace every
+    reference to an identifier by the type of that identifier. Since Python
+    is dynamically typed, we extract these type information using hand-written rules.
 
     \begin{lstlisting}[frame=single,basicstyle=\small]
 Before Canonicalization:
@@ -246,12 +235,12 @@ After Canonicalization:
       where the comment appears during code generation       
 
     \subsection{Comment-Code relevance}
-    A comment is relevant to the code only if it talks about some                                                                                                   
-          variable in the code. Based on this hypothesis, we keep only the                                                                                                
-          comment-code pairs, where the comment has a direct reference                                                                                                    
-          some variable/canonicalized-type in the code.
+      A comment is relevant to the code only if it talks about some
+      variable in the code. Based on this hypothesis, we keep only the
+      comment-code pairs, where the comment has a direct reference   
+      some variable/canonicalized-type in the code.
 
-          After all preprocessing, we end up with ~12.5K comment-code pairs.
+      After all preprocessing, we end up with ~12.5K comment-code pairs.
     \section{Methods}
 
     The two methods used:
