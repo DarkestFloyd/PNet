@@ -35,7 +35,46 @@
     \blindtext
 
     \section{Models}
-    \blindtext
+    Building upon Pengcheng's model, we build 4 models, each encodes the input in a slightly 
+    different way. First we start by briefly describing Pengcheng's model.
+
+      \subsection{Pengcheng's model}
+      Pengcheng recognized that adding syntax information to the model should give better
+      prediction. The model takes as input the raw comment and generates an AST of the 
+      corresponding code. The model is an Encoder-Decoder model, with the decoder doing most 
+      of the heavy lifting. The encoder comprises of an embedding layer, which produces token
+      specific embeddings, that are feed into a Bidirectional LSTM (BiLSTM). The output of this 
+      BiLSTM layer is a query embedding, which is passed to the decoder as input. \\
+
+      The decoder is slightly complicated and works in mysterious ways! Lord Voldomort himself
+      blessed it with his divine wand to produce a magical black box, that generates
+      AST's! \\
+
+      As described, the decoder is already at a state-of-the-art level, and needs no further 
+      modifications. All models described hereon use the same decoder architecture as Pengcheng's 
+      model.
+
+      \subsection{Basic Concat (BC)}
+      Our first model - Basic Concat (BC) model, concatenates the POS tag and phrase tag of the 
+      current timestep to the corresponding token embedding; Essentially expanding the input
+      from \textit{l} to \textit{(l + 2)} dimensions.
+
+      \subsection{Linear Projection (LP)}
+      After experimenting with BC, we decided to embed the POS and Phrase tags in the same way the
+      tokens are embedded, then perform a linear project on the new embedding, like in BiLSTM.
+
+      \subsection{Linear Projection Reduced Dimension (LPrd)}
+      We noticed that the embedding dimensions for POS embedding and Phrase embedding are very
+      large for their relatively small vocabulary sizes (14 and 44 respectively). We decided to 
+      reduce the embedding dimensions to 8 and 32.
+
+      \subsection{Raw Query Independent Preprojection (AdvLP)}
+      Rather then performing a linear projection on the three embeddings together, we tried to 
+      preproject the POS embedding and phrase embedding to create a new embedding, augmentation
+      embedding, which we then concatenate with the token embedding and performing another
+      linear projection to get the final token embeddings. We hypothesized that this would 
+      give us better results as we do try to retail as much information as possible from the
+      token embedding. 
 
     \section{Results}
     \blindtext
