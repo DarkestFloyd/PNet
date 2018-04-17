@@ -110,6 +110,28 @@
     explained in the Data Preprocessing section XXX to clean the dataset,
     thereby making the datasets more generic.
 
+    Barone et. al, 2017, [7], hereafter referred to as the "Edinburgh paper",
+    explores the difficulty of the code generation task and critiques
+    the currently available datasets for this task. They also comment that
+    the effectiveness reported by [4] should not be taken at face value.
+
+    In the Edinburgh paper, Barone et al. scraped online Opensource Python
+    repositories to extract ``docstring-code'' pairs. They propose that
+    such data accurately represents the query/code pairs found in
+    production environment. They used a Neural Machine Translation
+    approach to translate docstring to code and reported a baseline
+    BLEU score of 10.24, While [4] reports a BLEU score of 84.5 on the
+    Django dataset.
+
+    We wanted to check how [4] performs on a similar dataset.
+    We scraped query-code pairs from the same online Opensource Python repositories as [7].
+    [4], on our scraped dataset reports a BLEU score of only 14.2 which reaffirms
+    the [7]'s claim that the reported effectiveness of various
+    models could not be taken at face value and that the task of code generation
+    is more difficult than what is conceived by the community.
+    Much of this misrepresentation could be attributed to the fact that the
+    datasets currently available for this task is very limited and noisy.
+
     \section{Dataset}
       \subsection{Standard Datasets}
         \blindtext
