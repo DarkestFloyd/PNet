@@ -32,7 +32,34 @@
     \maketitle
 
     \section{Introduction}
-    \blindtext
+    \subsection{Importance of NL2code}
+    Recent Integrated Development Environments (IDEs) provide a feature called ``context-aware 
+    code completion'' which helps programmers speed up the coding process. This is very helpful for
+    programmers who are already aware of the programming language syntax and the design paradigms.
+    But, for beginners, this can be time consuming. \\
+    \hspace*{4mm}The first step, for beginners, is to search how to implement the code in natural 
+    language XXX. Due to the vast amount of resources available online, may unreliable or 
+    outdated, having a local NL to code generator will make programming more enjoyable for 
+    beginners and more productive for veteran programmers. And with the introduction of a new
+    language almost everyday, it has become more and more important to establish an interface
+    between NL and code. \\
+    \hspace*{4mm}We aim to create neural based models to generate NL to code. Below we describe
+    various attempts of implemening various encoder-decoder models for the same. It should be 
+    noted that the project does not aim at providing a framework to build industry standard 
+    deployable code, but is rather a proof-of-concept. The scope of this project is limited to 
+    generate an accurate single line program statement given user intent in the form of a comment 
+    or description. XXX \\
+
+    \begin{tabular}{c l}
+      \multicolumn{2}{ c }{Examples} \\
+      \hline
+      input & call the function sorted with argument x \\ 
+      ref. & sorted(x) \\
+      \hline
+      input & for every k in keys \\
+      ref. & for k in keys: \\
+      \hline
+    \end{tabular}
 
     \section{Related Word}
     \blindtext
