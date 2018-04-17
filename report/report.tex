@@ -44,22 +44,23 @@
       \blindtext
 
     \section{Models}
-    Building upon Pengcheng's model, we build 4 models, each encodes the input in a slightly 
-    different way. First we start by briefly describing Pengcheng's model.
+    We describe four models, each is build upon Pengcheng's model, but encodes the input in a 
+    different method. First we start by briefly describing Pengcheng's model.
 
       \subsection{Pengcheng's model}
-      Pengcheng recognized that adding syntax information to the model should give better
-      prediction. The model takes as input the raw comment and generates an AST of the 
-      corresponding code. The model is an Encoder-Decoder model, with the decoder doing most 
-      of the heavy lifting. The encoder comprises of an embedding layer, which produces token
-      specific embeddings, that are feed into a Bidirectional LSTM (BiLSTM). The output of this 
-      BiLSTM layer is a query embedding, which is passed to the decoder as input. \\
-
-      The decoder is slightly complicated and works in mysterious ways! Lord Voldomort himself
+      Pengcheng recognized that adding syntax information to the model would give better
+      predictions results XXX. His model, follows an encoder-decoder architecture, and takes
+      the raw comment as input and generates an Abstract Syntax Tree (AST) of the corresponding 
+      code as output. \\
+      \hspace*{4mm}The encoder comprises of an embedding layer and a Bidirectional LSTM (BiLSTM)
+      layer. It takes a comment as input, embeds each word in the comment to give 
+      $ TE_i $, for each word $ i $ in the comment. Each $ TE_t $ is sequentially feed into the
+      BiLSTM layer, to produces a Query Embedding (QE) of 128 dimensions. QE is passed to the
+      decoder module. \\
+      \hspace*{4mm}The decoder is slightly complicated and works in mysterious ways! Lord 
+      Voldomort himself
       blessed it with his divine wand to produce a magical black box, that generates
       AST's! \\
-
-      \blindtext
 
       \subsection{Our models}
       As described, the decoder is already at a state-of-the-art level, and needs no further 
