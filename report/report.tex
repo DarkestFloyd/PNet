@@ -148,10 +148,10 @@
 
       \subsection{Pengcheng's model}
       Pengcheng recognized that adding syntax information to the model would give better
-      predictions results XXX. His model, follows an encoder-decoder architecture, and takes
-      the raw comment as input and generates an Abstract Syntax Tree (AST) of the corresponding 
+      predictions results XXX. Their model follows an encoder-decoder architecture, and takes
+      the raw comment as input and generates an AST of the corresponding 
       code as output. \\
-      \hspace*{4mm}The encoder comprises of an embedding layer and a Bidirectional LSTM (BiLSTM)
+      \hspace*{4mm}The encoder comprises of an embedding layer and a BiLSTM
       layer. It takes a comment as input, embeds each word in the comment to give token embeddings
       TE\textsubscript{t}, for each word $ t $ in the comment. Each TE\textsubscript{t} is 
       sequentially feed into the 
@@ -160,13 +160,8 @@
       \hspace*{4mm}The decoder uses an Recurrent Neural Network (RNN) to sequentially generate 
       each node of the AST. Each node maps to a timestep in the RNN decoding process and thus, 
       generating the AST can be interpreted as unrolling the RNN. The RNN also maintains an 
-      internal state to track the generation process at each timestep.
-
-      \hspace*{4mm}The decoder is slightly complicated and works in mysterious ways! Lord 
-      Voldomort himself
-      blessed it with his divine wand to produce a magical black box, that generates
-      ASTs! \\
-      \hspace*{4mm}Pengcheng's tackles the problem with a probabilistic grammar model of
+      internal state to track the generation process at each timestep. \\
+      \hspace*{4mm}Pengcheng tackles the problem with a probabilistic grammar model of
       generating an AST $ y $ given NL description $ x $: $ p(y\vert x) $. The best possible AST 
       $ \hat{y} $ is given by:
 
@@ -181,44 +176,57 @@
       \begin{figure}[h]
         \centering
         \includegraphics[width=8cm]{pengcheng.png}
-        \caption{Architecture of Pengcheng's model.}
+        \caption{Architecture of Pengcheng's model. The encoder embeds each token of the NL input
+        to give TE\textsubscript{t}, which is then passed into the BiLSTM layer. The encoder
+        produces a 128 dimension QE which is feed into the decoder.}
         \label{fig:pengcheng}
       \end{figure}
 
       \subsection{Our models}
       As described, the decoder is already state-of-the-art XXX, and needs no further 
       modifications. All models described hereon use the same decoder architecture as Pengcheng's 
-      model with modifications to the encoder and the input data XXX. All models are trained and 
-      tested using the dataset decribed in SECTION. % todo add information about the embeddings
+      model with modifications only to the encoder and the input data XXX. All models are 
+      trained and tested using the dataset decribed in SECTION XXX. \\
 
         \subsubsection{Basic Concat (BC)}
         For our first attempt to incorporate syntax information into the encoder, we decided to 
-        concatenate (shown as ``:'') the POS and phrase ID of each token XXX to the corresponding 
-        token embedding, giving us the Augmented Token Embedding (ATE). The ATE is then feed into 
-        a modified BiLSTM
-        layer that takes 130 dimension embeddings, rather than the default 128 dimensions. \\
+        concatenate (shown as ``:'') the POS ID and phrase ID of each token to the corresponding 
+        token embedding, giving the Augmented Token Embedding (ATE). The ATE is then feed into 
+        a modified BiLSTM layer that takes 130 dimension embeddings, rather than the default 128 
+        dimensions. \\
 
-        \hspace*{-3.5mm}TE\textsubscript{t} dimensions: 128 \\
-        POS\_ID\textsubscript{t} and Phrase\_ID\textsubscript{t} dimensions: 1 each; total 2 \\
+        \begin{figure}[h]
+          \centering
+          \includegraphics[width=8cm]{bc.png}
+          \caption{Architecture of Basic Concat model. Notice that the POS ID and phrase ID
+          are directly appended to the corresponding TE. The resulting 130 dimension embedding
+          is passed to the BiLSTM.}
+          \label{fig:bc}
+        \end{figure}
+
+        \hspace*{-3.5mm}TE\textsubscript{t} dimension: 128 \\
+        POS\_ID\textsubscript{t} and Phrase\_ID\textsubscript{t} dimension: 1 each; total 2 \\
         ATE\textsubscript{t} dimension = 130 \\
 
         \hspace*{-3.5mm}ATE\textsubscript{t} = \lbrack TE\textsubscript{t} : 
         POS\_ID\textsubscript{t} : Phrase\_ID\textsubscript{t}\rbrack \\
         QE = BiLSTM(ATE) \\
 
-        \begin{figure}[h]
-          \centering
-          \includegraphics[width=8cm]{bc.png}
-          \caption{Architecture of Pengcheng's model.}
-          \label{fig:bc}
-        \end{figure}
-
         \subsubsection{Linear Projection (LP)}
-        To add some syntactic information over a sequence of tokens, we used an embedding layer for
+        To add syntactic information over a sequence of tokens, we used an embedding layer for
         POS and phrase tags. The resulting TE, POS embedding (POSE), and Phrase embedding (PhE) are
         then concatenated to produce the ATE; which is a $ (128 * 3) $ dimension vector. We then
         apply a linear projection (using a dense layer with the linear activation function) to 
         give ATE Projected (ATEP) which is passed to BiLSTM. \\
+
+        \begin{figure}[h]
+          \centering
+          \includegraphics[width=8cm]{lp.png}
+          \caption{Architecture of Linear Projection model. Each embedding - TE, POSE, and PhE 
+          are concatenated and projected (shown as purple circles). The resulting ATEP is passed
+          to the BiLSTM.}
+          \label{fig:lp}
+        \end{figure}
 
         \hspace*{-3.5mm}TE\textsubscript{t} dimension: 128 \\
         POSE\textsubscript{t} dimension: 128 \\
@@ -230,17 +238,18 @@
         ATEP\textsubscript{t} = Dense(ATE\textsubscript{t}) \\
         QE = BiLSTM(ATEP) \\
 
-        \begin{figure}[h]
-          \centering
-          \includegraphics[width=8cm]{lp.png}
-          \caption{Architecture of Pengcheng's model.}
-          \label{fig:lp}
-        \end{figure}
-
         \subsubsection{Linear Projection Reduced Dimension (LPrd)} 
         Subsequently, we noticed that the POS and Phrase vocabulary sizes were relatively smaller
         than token vocabulary size. To avoid redundancy XXX, we reduce the embedding dimensions
         of POSE and PhE to 8 and 32 respectively. The process described in LP is then repeated. \\
+
+        \begin{figure}[h]
+          \centering
+          \includegraphics[width=8cm]{lprd.png}
+          \caption{Architecture of Linear Projection Reduced Dimension model. Same as LP, but with
+          reduced dimensions for POSE and PhE.}
+          \label{fig:lprd}
+        \end{figure}
 
         \hspace*{-3.5mm}TE\textsubscript{t} dimension: 128 \\
         POSE\textsubscript{t} dimension: 8 \\
@@ -252,18 +261,21 @@
         ATEP\textsubscript{t} = Dense(ATE\textsubscript{t}) \\
         QE = BiLSTM(ATEP) \\
 
-        \begin{figure}[h]
-          \centering
-          \includegraphics[width=8cm]{lprd.png}
-          \caption{Architecture of Pengcheng's model.}
-          \label{fig:lprd}
-        \end{figure}
-
         \subsubsection{Raw Query Independent Preprojection (AdvLP)}
         Rather than applying one linear projection on ATE, we apply two here, where the first is 
         independent of the input query. POSE and PhE are concatenated and projected to create
         Augmentation Embedding (AE), which is then concatenated with TE and projected to produce
-        QE. \\
+        QE. We hypothesize that this would preserve most of the information from the input query
+        during projection. \\
+
+        \begin{figure}[h]
+          \centering
+          \includegraphics[width=8cm]{advlp.png}
+          \caption{Architecture of Raw Query Independent Preprojection model. POSE and PhE are
+          concatenated and projected independent of the input query. The resulting is 
+          concatenated with TE and projected to produce QE.}
+          \label{fig:advlp}
+        \end{figure}
 
         \hspace*{-3.5mm}TE\textsubscript{t} dimension: 128 \\
         POSE\textsubscript{t} dimension: 128 \\
@@ -276,15 +288,7 @@
         ATEP\textsubscript{t} = Dense(ATE\textsubscript{t}) \\
         QE = BiLSTM(ATEP) \\
 
-        \begin{figure}[h]
-          \centering
-          \includegraphics[width=8cm]{advlp.png}
-          \caption{Architecture of Pengcheng's model.}
-          \label{fig:advlp}
-        \end{figure}
       % end of Models
-
-    \blindtext
 
     \section{Experiments}
     All decoder dimensions and configurations are left untouched and are thus the same as in
