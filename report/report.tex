@@ -297,12 +297,20 @@
     metrics do not change for 10 epochs.
 
     \section{Results}
+    We evaluate our model on two metrics: BLEU and Accuracy.
+    \begin{enumerate}
+      \item BLEU: NLTK's \texttt{bleu\_score} function is used with NIST geometric sequence 
+        smoothing.
+      \item Accuracy: We use exact match for accuracy. +1 if the token matches the reference 
+        exactly, 0 otherwise. The total is normalized by the number of the prediction. \\
+    \end{enumerate}
+    \begin{center}
     \resizebox{8cm}{!} {
       \begin{tabular}{ | c | c || c | c | }
         \hline
         \multicolumn{2}{ | c ||}{\multirow{2}{*}{Models}} & \multicolumn{2}{ c | }{Metrics} \\
         \cline{3-4}
-        \multicolumn{2}{ | c ||}{} & BLUE & Accu. \\
+        \multicolumn{2}{ | c ||}{} & BLEU & Accu. \\
         \hline
         \multicolumn{2}{ | c ||}{Pengcheng} & 84.5 & 71.6 \\
         \multicolumn{2}{ | c ||}{Base} & 73.2 & 67.9 \\
@@ -313,6 +321,7 @@
         & AdvLP & 73.7 & 69.1 \\
         \hline  
       \end{tabular} }
+    \end{center}
 
     \section{Conclusion}
     \blindtext
