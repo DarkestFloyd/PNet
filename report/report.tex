@@ -2,9 +2,12 @@
 \pagenumbering{gobble}
 
 \usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{bm}
 \usepackage{blindtext}
 \usepackage{multirow}
 \usepackage{graphicx}
+\usepackage{caption}
 \graphicspath{ {./images/} }
 
 \title{\textbf{NL2code}}
@@ -59,10 +62,26 @@
       sequentially feed into the 
       BiLSTM layer, to produces a Query Embedding (QE) of 128 dimensions. QE is passed to the
       decoder module. \\
+      \hspace*{4mm}The decoder uses an Recurrent Neural Network (RNN) to sequentially generate 
+      each node of the AST. Each node maps to a timestep in the RNN decoding process and thus, 
+      generating the AST can be interpreted as unrolling the RNN. The RNN also maintains an 
+      internal state to track the generation process at each timestep.
+
       \hspace*{4mm}The decoder is slightly complicated and works in mysterious ways! Lord 
       Voldomort himself
       blessed it with his divine wand to produce a magical black box, that generates
       ASTs! \\
+      \hspace*{4mm}Pengcheng's tackles the problem with a probabilistic grammar model of
+      generating an AST $ y $ given NL description $ x $: $ p(y\vert x) $. The best possible AST 
+      $ \hat{y} $ is given by:
+
+      \begin{equation}
+        \label{eq:pengcheng}
+        \hat{y} = \operatorname*{arg\,max}_y p(y\vert x)
+      \end{equation}
+
+      $ \hat{y} $ is then deterministically converted to the corresponding Python code using
+      \texttt{astor} XXX.
 
       \begin{figure}[h]
         \centering
@@ -88,8 +107,8 @@
         POS\_ID\textsubscript{t} and Phrase\_ID\textsubscript{t} dimensions: 1 each; total 2 \\
         ATE\textsubscript{t} dimension = 130 \\
 
-        \hspace*{-3.5mm}ATE\textsubscript{t} = [TE\textsubscript{t} : 
-        POS\_ID\textsubscript{t} : Phrase\_ID\textsubscript{t}] \\
+        \hspace*{-3.5mm}ATE\textsubscript{t} = \lbrack TE\textsubscript{t} : 
+        POS\_ID\textsubscript{t} : Phrase\_ID\textsubscript{t}\rbrack \\
         QE = BiLSTM(ATE) \\
 
         \begin{figure}[h]
