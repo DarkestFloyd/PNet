@@ -5,6 +5,7 @@
 \usepackage{blindtext}
 \usepackage{multirow}
 \usepackage{graphicx}
+\graphicspath{ {./images/} }
 
 \title{\textbf{NL2code}}
 
@@ -63,6 +64,13 @@
       blessed it with his divine wand to produce a magical black box, that generates
       ASTs! \\
 
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=8cm]{pengcheng.png}
+        \caption{Architecture of Pengcheng's model.}
+        \label{fig:pengcheng}
+      \end{figure}
+
       \subsection{Our models}
       As described, the decoder is already state-of-the-art XXX, and needs no further 
       modifications. All models described hereon use the same decoder architecture as Pengcheng's 
@@ -84,6 +92,13 @@
         POS\_ID\textsubscript{t} : Phrase\_ID\textsubscript{t}] \\
         QE = BiLSTM(ATE) \\
 
+        \begin{figure}[h]
+          \centering
+          \includegraphics[width=8cm]{bc.png}
+          \caption{Architecture of Pengcheng's model.}
+          \label{fig:bc}
+        \end{figure}
+
         \subsubsection{Linear Projection (LP)}
         To add some syntactic information over a sequence of tokens, we used an embedding layer for
         POS and phrase tags. The resulting TE, POS embedding (POSE), and Phrase embedding (PhE) are
@@ -101,6 +116,13 @@
         ATEP\textsubscript{t} = Dense(ATE\textsubscript{t}) \\
         QE = BiLSTM(ATEP) \\
 
+        \begin{figure}[h]
+          \centering
+          \includegraphics[width=8cm]{lp.png}
+          \caption{Architecture of Pengcheng's model.}
+          \label{fig:lp}
+        \end{figure}
+
         \subsubsection{Linear Projection Reduced Dimension (LPrd)} 
         Subsequently, we noticed that the POS and Phrase vocabulary sizes were relatively smaller
         than token vocabulary size. To avoid redundancy XXX, we reduce the embedding dimensions
@@ -115,6 +137,13 @@
         POSE\textsubscript{t} : PhE\textsubscript{t}] \\
         ATEP\textsubscript{t} = Dense(ATE\textsubscript{t}) \\
         QE = BiLSTM(ATEP) \\
+
+        \begin{figure}[h]
+          \centering
+          \includegraphics[width=8cm]{lprd.png}
+          \caption{Architecture of Pengcheng's model.}
+          \label{fig:lprd}
+        \end{figure}
 
         \subsubsection{Raw Query Independent Preprojection (AdvLP)}
         Rather than applying one linear projection on ATE, we apply two here, where the first is 
@@ -133,6 +162,12 @@
         ATEP\textsubscript{t} = Dense(ATE\textsubscript{t}) \\
         QE = BiLSTM(ATEP) \\
 
+        \begin{figure}[h]
+          \centering
+          \includegraphics[width=8cm]{advlp.png}
+          \caption{Architecture of Pengcheng's model.}
+          \label{fig:advlp}
+        \end{figure}
       % end of Models
 
     \blindtext
