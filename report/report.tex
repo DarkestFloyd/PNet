@@ -62,7 +62,53 @@
     \end{tabular}
 
     \section{Related Word}
-    \blindtext
+    Techniques to generate regular expressions [1], input parsers
+    [2], UML diagrams, object oriented class layout, and general
+    purpose code from Natural Language (NL) specification have
+    been researched for a long time.
+
+    Recent approaches in converting NL to executable source
+    code predominantly use neural network techniques. These approaches follow two basic patterns. 
+    One, is to directly convert
+    NL to source code by modeling the task as a Sequence-to-Sequence conversion task, 
+    using Recurrent Neural Networks
+    (RNN) (Lili Mou et al., 2015, Ling et al., 2016) [3], [6] to that end.
+    The other is to generate Abstract Syntax Trees (ASTs) from NL input, the deterministically
+    convert the produced AST to code (Pengcheng Yin et al., 2017) [4].
+
+    However, research [4] shows that the second approach is better
+    than the first and emphasizes the use of syntax information of
+    the target language, in NL to code tasks.
+    We consider the recent research paper by Pengchen Yin
+    et. al. [4] , on syntactic neural model for code generation
+    as the primary motivation for this project. [4] proposes an
+    approach where they translate NL to an Abstract Syntax Tree
+    (AST) first, thus using the grammar of the target language
+    as a prior knowledge. They report a 10\% absolute improvement in accuracy compared to 
+    the previous state-of-the-art
+    on standard datasets. Since, converting from AST to code
+    can be done deterministically, their system always produces
+    syntactically correct, executable code. This aspect is lacking
+    in the Sequence-to-Sequence models, where the correctness of
+    the generated code is not guaranteed. They use a Bidirectional
+    LSTM (BiLSTM) network for encoding each word of the NL input as
+    a context specific embedding, and an RNN as a decoder to
+    generate an output AST.
+
+    Maxim Robinovich et. al. [5], propose an approach similar
+    to [4] for converting NL to AST. They confirm the experimental results of [4], thus again 
+    emphasizing the use of target
+    language syntax. However Maxim Robinovich et. al., have
+    evaluated their system on a wider range of datasets achieving
+    near state-of-the-art results on average.
+
+    Pengcheg Yin et.al [4], report that 25\% of the errors incurred
+    by their system, on one of the datasets, is due to the generated
+    code only partially implementing the required functionality.
+    We hypothesize that this could be due to the standard datasets
+    used for this task being noisy. We propose a denoising procedure,
+    explained in the Data Preprocessing section XXX to clean the dataset,
+    thereby making the datasets more generic.
 
     \section{Dataset}
       \subsection{Standard Datasets}
