@@ -63,83 +63,86 @@
       AST's! \\
 
       \subsection{Our models}
-      As described, the decoder is already at a state-of-the-art level, and needs no further 
+      As described, the decoder is already at a state-of-the-art level XXX, and needs no further 
       modifications. All models described hereon use the same decoder architecture as Pengcheng's 
-      model with modifications to the encoder and the input data. All models are trained and 
+      model with modifications to the encoder and the input data XXX. All models are trained and 
       tested using the dataset decribed in SECTION. % todo add information about the embeddings
 
-      \subsubsection{Basic Concat (BC)}
-      For our first attemp to incorporate syntax information into the encoder, we decided to 
-      add (append) the POS and phrase ID of each token to the corresponding token embedding, 
-      giving us the Augmented Token Embedding (ATE). The ATE is then feed into a modified BiLSTM
-      layer that took 130 dimension embeddings, rather than the specified 128 dimensions. \\
+        \subsubsection{Basic Concat (BC)}
+        For our first attemp to incorporate syntax information into the encoder, we decided to 
+        add (append) the POS and phrase ID of each token to the corresponding token embedding, 
+        giving us the Augmented Token Embedding (ATE). The ATE is then feed into a modified BiLSTM
+        layer that took 130 dimension embeddings, rather than the specified 128 dimensions. \\
 
-      \hspace*{-4mm}Token embedding dimensions: 128 \\
-      POS and Phrase ID dimensions: 1 each; total 2 \\
-      Augmented token embedding dimensions: 130 \\
+        \hspace*{-4mm}Token embedding dimensions: 128 \\
+        POS and Phrase ID dimensions: 1 each; total 2 \\
+        Augmented token embedding dimensions: 130 \\
 
-      \subsubsection{Linear Projection (LP)}
-      To add some syntactic information over a sequence of tokens, we used an embedding layer for
-      POS and phrase tags. The resulting TE, POS embedding (POSE), and Phrase embedding (PhE) are
-      then concatenated to produce the ATE; which is a (128 * 3) dimension vector. We then
-      apply a linear projection (using a dense layer with (128 * 3) input nodes, 128 output nodes,
-      and the linear actiation function). This new vector is passed to the BiLSTM of Pengcheng's
-      model. \\
+        \subsubsection{Linear Projection (LP)}
+        To add some syntactic information over a sequence of tokens, we used an embedding layer for
+        POS and phrase tags. The resulting TE, POS embedding (POSE), and Phrase embedding (PhE) are
+        then concatenated to produce the ATE; which is a (128 * 3) dimension vector. We then
+        apply a linear projection (using a dense layer with (128 * 3) input nodes, 128 output 
+        nodes, and the linear actiation function). This new vector is passed to the BiLSTM of 
+        Pengcheng's model. \\
 
-      \hspace*{-4mm}Token embedding dimension: 128 \\
-      POS embedding dimension: 128 \\
-      Phrase embedding dimension: 128 \\
-      Dense = (128 * 3) input nodes, 128 output nodes \\ 
-      ATE = [TE : POSE : PhE] (: is concatenation)\\
-      ATE' = Dense(ATE) \\
-      QE = BiLSTM(ATE') \\
+        \hspace*{-4mm}Token embedding dimension: 128 \\
+        POS embedding dimension: 128 \\
+        Phrase embedding dimension: 128 \\
+        Dense = (128 * 3) input nodes, 128 output nodes \\ 
+        ATE = [TE : POSE : PhE] (: is concatenation)\\
+        ATE' = Dense(ATE) \\
+        QE = BiLSTM(ATE`) \\
 
-      \subsubsection{Linear Projection Reduced Dimension (LPrd)} 
-      Subsequently, we noticed that the POS and Phrase vocabulary sizes were relatively smaller
-      than token vocabulary size. To avoid redundancy XXX, we changed the embedding dimensions
-      of POSE and PhE to 8 and 32 respectively. The process described in LP is then repeated. \\
+        \subsubsection{Linear Projection Reduced Dimension (LPrd)} 
+        Subsequently, we noticed that the POS and Phrase vocabulary sizes were relatively smaller
+        than token vocabulary size. To avoid redundancy XXX, we changed the embedding dimensions
+        of POSE and PhE to 8 and 32 respectively. The process described in LP is then repeated. \\
 
-      \hspace*{-4mm}Token embedding dimension: 128 \\
-      POS embedding dimension: 8 \\
-      Phrase embedding dimension: 32 \\
-      Dense = (128 + 8 + 32) input nodes, 128 output nodes \\
-      ATE = [TE : POSE : PhE] (: is concatenation)\\
-      ATE' = Dense(ATE) \\
-      Query Embedding = BiLSTM(ATE') \\
+        \hspace*{-4mm}Token embedding dimension: 128 \\
+        POS embedding dimension: 8 \\
+        Phrase embedding dimension: 32 \\
+        Dense = (128 + 8 + 32) input nodes, 128 output nodes \\
+        ATE = [TE : POSE : PhE] (: is concatenation)\\
+        ATE' = Dense(ATE) \\
+        Query Embedding = BiLSTM(ATE') \\
 
-      \subsubsection{Raw Query Independent Preprojection (AdvLP)}
-      Rather than applying one linear projection on ATE, we apply two here, where the first is 
-      independent of the input query. \\
+        \subsubsection{Raw Query Independent Preprojection (AdvLP)}
+        Rather than applying one linear projection on ATE, we apply two here, where the first is 
+        independent of the input query. \\
 
-      \hspace*{-4mm}Token embedding dimension: 128 \\
-      POS embedding dimension: 128 \\
-      Phrase embedding dimension: 128 \\
-      preprojector = (128 * 2) input nodes, 128 output nodes \\
-      Dense = (128 * 3) input nodes, 128 output nodes \\ 
-      AE = [POSE : PhE] \\
-      PAE = Preprojector(AE) \\
-      ATE = [TE : PAE] \\
-      ATE' = Dense(ATE) \\
-      QE = BiLSTM(ATE') \\
-    % end of Models
+        \hspace*{-4mm}Token embedding dimension: 128 \\
+        POS embedding dimension: 128 \\
+        Phrase embedding dimension: 128 \\
+        preprojector = (128 * 2) input nodes, 128 output nodes \\
+        Dense = (128 * 3) input nodes, 128 output nodes \\ 
+        AE = [POSE : PhE] \\
+        PAE = Preprojector(AE) \\
+        ATE = [TE : PAE] \\
+        ATE' = Dense(ATE) \\
+        QE = BiLSTM(ATE') \\
+      % end of Models
 
+    \blindtext
+
+    \section{Experiments}
     \blindtext
 
     \section{Results}
     \resizebox{8cm}{!} {
-      \begin{tabular}{ c | c || c | c }
+      \begin{tabular}{ | c | c || c | c | }
         \hline
-        \multicolumn{2}{ c ||}{\multirow{2}{*}{Models}} & \multicolumn{2}{ c }{Metrics} \\
+        \multicolumn{2}{ | c ||}{\multirow{2}{*}{Models}} & \multicolumn{2}{ c | }{Metrics} \\
         \cline{3-4}
-        \multicolumn{2}{ c ||}{} & BLUE & Accu. \\
+        \multicolumn{2}{ | c ||}{} & BLUE & Accu. \\
         \hline
-        \multicolumn{2}{ c ||}{Pengcheng} & 1 & 1\\
-        \multicolumn{2}{ c ||}{Base} & 3 & 1\\
+        \multicolumn{2}{ | c ||}{Pengcheng} & 84.5 & 71.6 \\
+        \multicolumn{2}{ | c ||}{Base} & 73.2 & 67.9 \\
         \hline
-        \multirow{4}{*}{NL2code} & BC & 1 & 1\\
-        & LP & 9 & 1\\
-        & LPrd & 1 & 1\\
-        & AdvLP & 1 & 1\\
+        \multirow{4}{*}{NL2code} & BC & 73.6 & 69.4 \\
+        & LP & \underline{74.3} & \underline{69.7} \\
+        & LPrd & 73.6 & 69.0 \\
+        & AdvLP & 73.7 & 69.1 \\
         \hline  
       \end{tabular} }
 
