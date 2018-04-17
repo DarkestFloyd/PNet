@@ -3,6 +3,7 @@
 
 \usepackage[english]{babel}
 \usepackage{blindtext}
+\usepackage{multirow}
 
 \title{\textbf{NL2code}}
 
@@ -77,7 +78,23 @@
       token embedding. 
 
     \section{Results}
-    \blindtext
+    \begin{center}
+      \begin{tabular}{| c | l || c | c |}
+        \hline
+        \multicolumn{2}{| c ||}{\multirow{2}{*}{Models}} & \multicolumn{2}{ c |}{Metrics} \\
+        \cline{3-4}
+        \multicolumn{2}{| c ||}{} & BLUE & Accu. \\
+        \hline
+        \multicolumn{2}{| c ||}{Pengcheng} & 1 & 1\\
+        \multicolumn{2}{| c ||}{Base} & 3 & 1\\
+        \hline
+        \multirow{4}{*}{NL2code} & BC & 1 & 1\\
+        & LP & 9 & 1\\
+        & LPrd & 1 & 1\\
+        & AdvLP & 1 & 1\\
+        \hline  
+      \end{tabular}
+    \end{center}
 
     \section{Conclusion}
     \blindtext
