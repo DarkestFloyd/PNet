@@ -39,17 +39,17 @@
     programmers who are already aware of the programming language syntax and the design paradigms.
     But, for beginners, this can be time consuming. \\
     \hspace*{4mm}The first step, for beginners, is to search how to implement the code in natural 
-    language XXX. Due to the vast amount of resources available online, may unreliable or 
-    outdated, having a local NL to code generator will make programming more enjoyable for 
-    beginners and more productive for veteran programmers. And with the introduction of a new
+    language. Due to the vast amount of resources available online, many unreliable or 
+    outdated, having a NL to code generator will make programming more enjoyable for 
+    beginners and more productive for veteran programmers. With the introduction of a new
     language almost everyday, it has become more and more important to establish an interface
     between NL and code. \\
-    \hspace*{4mm}We aim to create neural based models to generate NL to code. Below we describe
-    various attempts of implemening various encoder-decoder models for the same. It should be 
+    \hspace*{4mm}We aim to create neural based models to generate code from NL. Below we describe
+    several attempts of implemening various encoder-decoder models for the same. It should be 
     noted that the project does not aim at providing a framework to build industry standard 
     deployable code, but is rather a proof-of-concept. The scope of this project is limited to 
     generate an accurate single line program statement given user intent in the form of a comment 
-    or description. XXX \\
+    or description. \\
 
     \begin{tabular}{c l}
       \multicolumn{2}{ c }{Examples} \\
@@ -63,8 +63,8 @@
     \end{tabular}
 
     \section{Related Word}
-    Techniques to generate regular expressions [1], input parsers
-    [2], UML diagrams, object oriented class layout, and general
+    Techniques to generate regular expressions \cite{berant2013semantic}, input parsers
+    \cite{lei2013natural}, UML diagrams, object oriented class layout, and general
     purpose code from Natural Language (NL) specification have
     been researched for a long time.
 
@@ -73,18 +73,19 @@
     One, is to directly convert
     NL to source code by modeling the task as a Sequence-to-Sequence conversion task, 
     using Recurrent Neural Networks
-    (RNN) (Lili Mou et al., 2015, Ling et al., 2016) [3], [6] to that end.
-    The other is to generate Abstract Syntax Trees (ASTs) from NL input, the deterministically
-    convert the produced AST to code (Pengcheng Yin et al., 2017) [4].
+    (RNN) (Lili Mou et al., 2015, Ling et al., 2016) \cite{mou2015end}, 
+    \cite{ling2016latent} to that end.
+    The other is to generate Abstract Syntax Trees (ASTs) from NL input, then deterministically
+    convert the produced AST to code (Pengcheng Yin et al., 2017) \cite{yin2017syntactic}.
 
-    However, research [4] shows that the second approach is better
+    However, research \cite{yin2017syntactic} shows that the second approach is better
     than the first and emphasizes the use of syntax information of
     the target language, in NL to code tasks.
-    We consider the recent research paper by Pengchen Yin
-    et. al. [4] , on syntactic neural model for code generation
-    as the primary motivation for this project. [4] proposes an
+    We consider the recent research paper by Pengcheng Yin
+    et. al. \cite{yin2017syntactic} , on syntactic neural model for code generation
+    as the primary motivation for this project. \cite{yin2017syntactic} proposes an
     approach where they translate NL to an Abstract Syntax Tree
-    (AST) first, thus using the grammar of the target language
+    (AST) first, using the grammar of the target language
     as a prior knowledge. They report a 10\% absolute improvement in accuracy compared to 
     the previous state-of-the-art
     on standard datasets. Since, converting from AST to code
@@ -96,49 +97,49 @@
     a context specific embedding, and an RNN as a decoder to
     generate an output AST.
 
-    Maxim Robinovich et. al. [5], propose an approach similar
-    to [4] for converting NL to AST. They confirm the experimental results of [4], thus again 
+    Maxim Robinovich et. al. \cite{rabinovich2017abstract}, propose an approach similar
+    to \cite{yin2017syntactic} for converting NL to AST. They confirm the experimental results of \cite{yin2017syntactic}, thus again 
     emphasizing the use of target
     language syntax. However Maxim Robinovich et. al., have
     evaluated their system on a wider range of datasets achieving
     near state-of-the-art results on average.
 
-    Pengcheg Yin et.al [4], report that 25\% of the errors incurred
+    Pengcheg Yin et.al \cite{yin2017syntactic}, report that 25\% of the errors incurred
     by their system, on one of the datasets, is due to the generated
     code only partially implementing the required functionality.
     We hypothesize that this could be due to the standard datasets
     used for this task being noisy. We propose a denoising procedure,
-    explained in the Data Preprocessing section XXX to clean the dataset,
+    explained in the Data Preprocessing section to clean the dataset,
     thereby making the datasets more generic.
 
-    Barone et. al, 2017, [7], hereafter referred to as the "Edinburgh paper",
+    Barone et. al, 2017 \cite{barone2017parallel}, hereafter referred to as the "Edinburgh paper",
     explores the difficulty of the code generation task and critiques
     the currently available datasets for this task. They also comment that
-    the effectiveness reported by [4] should not be taken at face value.
+    the effectiveness reported by \cite{yin2017syntactic} should not be taken at face value.
 
-    In the Edinburgh paper, Barone et al. scraped online Opensource Python
+    In the Edinburgh paper, Barone et al. scraped online open source Python
     repositories to extract ``docstring-code'' pairs. They propose that
     such data accurately represents the query/code pairs found in
     production environment. They used a Neural Machine Translation
     approach to translate docstring to code and reported a baseline
-    BLEU score of 10.24, While [4] reports a BLEU score of 84.5 on the
+    BLEU score of 10.24, While \cite{yin2017syntactic} reports a BLEU score of 84.5 on the
     Django dataset.
 
-    We wanted to check how [4] performs on a similar dataset.
-    We scraped query-code pairs from the same online Opensource Python repositories as [7].
-    [4], on our scraped dataset reports a BLEU score of only 14.2 which reaffirms
-    the [7]'s claim that the reported effectiveness of various
+    We wanted to check how \cite{yin2017syntactic} performs on a similar dataset.
+    We scraped query-code pairs from the same online open source Python repositories as \cite{barone2017parallel}.
+    \cite{yin2017syntactic}, on our scraped dataset reports a BLEU score of only 14.2 which reaffirms
+    the \cite{barone2017parallel}'s claim that the reported effectiveness of various
     models could not be taken at face value and that the task of code generation
     is more difficult than what is conceived by the community.
     Much of this misrepresentation could be attributed to the fact that the
-    datasets currently available for this task is very limited and noisy.
+    datasets currently available for this task are very limited and noisy.
 
     \section{Dataset}
       \subsection{Standard Datasets}
         There are 3 datasets that have been used by the research community for the task
         of code-generation from the comments/query.
         \subsubsection{Django}
-        Django dataset is a collection of 18000 lines of python code from the Opensource
+        Django dataset is a collection of 18000 lines of python code from the open source
         web framework, Django. The 18000 code statements have been manually annotated
         with a Natural language description. As a result of manual annotations, all the
         annotations are artificially descriptive of the corresponding code. This is
@@ -163,9 +164,9 @@ code:
         HearthStone dataset is a collection of 600 Python class - description pairs
         that implement cards for the online multiplayer card game HearthStone.
         The class - description pairs used to train and test are very similar, in that
-        the any model trained on this dataset would be able to generate only a
+        any model trained on this dataset would be able to generate only a
         single template of code, like the one presented in the example. We could not
-        use this dataset as the scope of the dataset very narrow and far from the case
+        use this dataset as the scope of the dataset is very narrow and far from the case
         in general production environment. 
 
         \begin{lstlisting}[frame=single,basicstyle=\scriptsize]
@@ -241,7 +242,7 @@ code:
         \subsubsection{Processed Django}
         Among all the datasets explored, the Django dataset represents the problem
         of converting NL to source code more accurately. But, as mentioned above
-        the Django dataset is very noise, hence we denoise it (techniques
+        the Django dataset is very noisy, hence we denoise it (techniques
         mentioned in data preprocessing) before using it.
 
 				\smallskip
@@ -265,25 +266,25 @@ code:
 				\end{center}
 
     \section{Models}
-    We describe four models, each is build upon Pengcheng's model, but encodes the input in a 
+    We describe four models, each is built upon Pengcheng's model, but encodes the input in a 
     different method. First we start by briefly describing Pengcheng's model.
 
       \subsection{Pengcheng's model}
       Pengcheng recognized that adding syntax information to the model would give better
-      predictions results XXX. Their model follows an encoder-decoder architecture, and takes
+      result. Their model follows an encoder-decoder architecture, and takes
       the raw comment as input and generates an AST of the corresponding 
       code as output. \\
       \hspace*{4mm}The encoder comprises of an embedding layer and a BiLSTM
       layer. It takes a comment as input, embeds each word in the comment to give token embeddings
       TE\textsubscript{t}, for each word $ t $ in the comment. Each TE\textsubscript{t} is 
-      sequentially feed into the 
+      sequentially fed into the 
       BiLSTM layer, to produces a Query Embedding (QE) of 128 dimensions. QE is passed to the
       decoder module. \\
       \hspace*{4mm}The decoder uses an Recurrent Neural Network (RNN) to sequentially generate 
       each node of the AST. Each node maps to a timestep in the RNN decoding process and thus, 
       generating the AST can be interpreted as unrolling the RNN. The RNN also maintains an 
       internal state to track the generation process at each timestep. \\
-      \hspace*{4mm}Pengcheng tackles the problem with a probabilistic grammar model of
+      \hspace*{4mm}Pengcheng tackles this problem with a probabilistic grammar model of
       generating an AST $ y $ given NL description $ x $: $ p(y\vert x) $. The best possible AST 
       $ \hat{y} $ is given by:
 
@@ -292,28 +293,27 @@ code:
         \hat{y} = \operatorname*{arg\,max}_y p(y\vert x)
       \end{equation}
 
-      $ \hat{y} $ is then deterministically converted to the corresponding Python code using
-      \texttt{astor} XXX.
+      $ \hat{y} $ is then deterministically converted to the corresponding Python code.
 
       \begin{figure}[h]
         \centering
         \includegraphics[width=8cm]{pengcheng.png}
         \caption{Architecture of Pengcheng's model. The encoder embeds each token of the NL input
         to give TE\textsubscript{t}, which is then passed into the BiLSTM layer. The encoder
-        produces a 128 dimension QE which is feed into the decoder.}
+        produces a 128 dimension QE which is fed into the decoder.}
         \label{fig:pengcheng}
       \end{figure}
 
       \subsection{Our models}
-      As described, the decoder is already state-of-the-art XXX, and needs no further 
-      modifications. All models described hereon use the same decoder architecture as Pengcheng's 
-      model with modifications only to the encoder and the input data XXX. All models are 
-      trained and tested using the dataset decribed in SECTION XXX. \\
+      As described, the decoder is already state-of-the-art, and needs no further 
+      modifications. All models described here-on use the same decoder architecture as Pengcheng's 
+      model with modifications only to the encoder and the input data. All models are 
+      trained and tested using the dataset described in Processed Django. \\
 
         \subsubsection{Basic Concat (BC)}
         For our first attempt to incorporate syntax information into the encoder, we decided to 
         concatenate (shown as ``:'') the POS ID and phrase ID of each token to the corresponding 
-        token embedding, giving the Augmented Token Embedding (ATE). The ATE is then feed into 
+        token embedding, giving the Augmented Token Embedding (ATE). The ATE is then fed into 
         a modified BiLSTM layer that takes 130 dimension embeddings, rather than the default 128 
         dimensions. \\
 
@@ -329,6 +329,7 @@ code:
         \hspace*{-3.5mm}TE\textsubscript{t} dimension: 128 \\
         POS\_ID\textsubscript{t} and Phrase\_ID\textsubscript{t} dimension: 1 each; total 2 \\
         ATE\textsubscript{t} dimension = 130 \\
+
         \hspace*{-3.5mm}ATE\textsubscript{t} = \lbrack TE\textsubscript{t} : 
         POS\_ID\textsubscript{t} : Phrase\_ID\textsubscript{t}\rbrack \\
         QE = BiLSTM(ATE) \\
@@ -361,7 +362,7 @@ code:
 
         \subsubsection{Linear Projection Reduced Dimension (LPrd)} 
         Subsequently, we noticed that the POS and Phrase vocabulary sizes were relatively smaller
-        than token vocabulary size. To avoid redundancy XXX, we reduce the embedding dimensions
+        than token vocabulary size. Thus, we reduce the embedding dimensions
         of POSE and PhE to 8 and 32 respectively. The process described in LP is then repeated. \\
 
         \begin{figure}[h]
@@ -413,8 +414,8 @@ code:
 
     \section{Experiments}
     All decoder dimensions and configurations are left untouched and are thus the same as in
-    Pengcheng's model. For each of the above models, the embedding sizes are as described Models.
-    Each model is run for a maximum of 50 epochs, with early stopping if the validation
+    Pengcheng's model. For each of the above models, the embedding sizes are as described in 
+    Models. Each model is run for a maximum of 50 epochs, with early stopping if the validation
     metrics do not change for 10 epochs.
 
     \section{Results}
@@ -448,7 +449,7 @@ code:
     \section{Conclusion}
     \blindtext
 
-    % \bibliographystyle{ieeetran}
-    % \bibliography{report}
+    \bibliographystyle{ieeetran}
+    \bibliography{report}
 
 \end{document}
