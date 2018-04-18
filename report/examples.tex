@@ -3,7 +3,13 @@
 \pagenumbering{gobble}
 \usepackage{multirow}
 
+\title{Suplementary material}
+\author{}
+\date{}
+
 \begin{document}
+
+  \maketitle
 
   \section{Correctly Predicted Examples}
 
@@ -18,8 +24,8 @@
     \hline
     \textbf{input} & \texttt{remove last element for ANY\_0 .} \\
     \textbf{pred.} & \texttt{ANY\_0 = ANY\_0[:-1]} \\
-    \textbf{remark}& \texttt{The fact that the model learned to map the token ``last'' in the 
-                     query to ``-1'' in code, tells us that the model has learnt to translate some 
+    \textbf{remark}& \texttt{The fact that the model learned to map the token "last" in the 
+                     query to "-1" in code, tells us that the model has learnt to translate some 
                      semantics in the input query to code.} \\
     \hline
   \end{tabular}
@@ -34,7 +40,7 @@
     \textbf{pred.} & \texttt{ANY\_0 = None, (None,), CLASS\_0.None} \\
     \textbf{remark}& \texttt{A typical form, XXX.YYY appears in code, whenever the user wants to 
                      express that YYY is an attribute of entity. Here, we hypothesize that the 
-                     model assigned ``None'' as CLASS\_0's attribute due to the period at the end 
+                     model assigned "None" as CLASS\_0's attribute due to the period at the end 
                      of the sentence.} \\
     \hline
 		\textbf{input} & \texttt{call the function CLASS\_0 . FUNC\_0 -LSB- CLASS\_0 . FUNC\_0 -RSB- 
