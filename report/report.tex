@@ -146,7 +146,7 @@
         the comments that programmers write in production environment. This can be seen
         in the following example.
 
-      \begin{lstlisting}[frame=single,basicstyle=\small]
+        \begin{lstlisting}[frame=single,basicstyle=\small]
 comment:
   raise and exception InvalidCacheBackendError 
   with string "Could not find config for '\%s' 
@@ -157,7 +157,7 @@ code:
   raise InvalidCacheBackendError ( "Could not 
   find config for '\%s' in settings.CACHES" \% 
   alias )
-      \end{lstlisting}
+        \end{lstlisting}
 
         \subsubsection{HearthStone}
         HearthStone dataset is a collection of 600 Python class - description pairs
@@ -168,7 +168,7 @@ code:
         use this dataset as the scope of the dataset very narrow and far from the case
         in general production environment. 
 
-      \begin{lstlisting}[frame=single,basicstyle=\scriptsize]
+        \begin{lstlisting}[frame=single,basicstyle=\scriptsize]
 card details:
   name: ['D', 'i', 'r', 'e', ' ', 
         'W', 'o', 'l', 'f', ' ', 
@@ -193,7 +193,7 @@ correspoding code:
     def create_minion(self, player):
       return Minion(2, 2, auras=[Aura(ChangeAttack(1), 
                           MinionSelector(Adjacent()))])
-      \end{lstlisting}
+        \end{lstlisting}
 
         \subsubsection{Edinburgh}
         The Edinburgh dataset is a collection of 200k docstring-code pairs scraped
@@ -204,7 +204,7 @@ correspoding code:
         we need information on implemention logic thus making the dataset unusable
         for our task.
 
-      \begin{lstlisting}[frame=single,basicstyle=\scriptsize]
+        \begin{lstlisting}[frame=single,basicstyle=\scriptsize]
 comment:
   Process elementNode by svgReader.
 
@@ -229,7 +229,7 @@ code:
         translatedLoop.append(textComplexPoint + translate)
       loopLayer.loops.append(matrixSVG.
         getTransformedPath(translatedLoop))
-      \end{lstlisting}
+        \end{lstlisting}
 
       \subsection{Our dataset}
         \subsubsection{Scrapped Dataset}
@@ -243,6 +243,23 @@ code:
         of converting NL to source code more accurately. But, as mentioned above
         the Django dataset is very noise, hence we denoise it (techniques
         mentioned in data preprocessing) before using it.
+
+				\smallskip
+
+				\begin{center}
+        \begin{tabular}{ l | r }
+					\hline
+          \multicolumn{2}{ c }{Dataset Statistics} \\
+					\hline
+          Maximum query/comment length & 133 \\
+					Maximum code length          & 701 \\
+					Average query/comment length & 16.0 \\
+					Average code length          & 8.7 \\
+					Vocabulary size - Query      & 2205 \\
+					Vocabulary size - Code       & 814 \\
+					\hline
+        \end{tabular}
+				\end{center}
 
     \section{Models}
     We describe four models, each is build upon Pengcheng's model, but encodes the input in a 
@@ -309,7 +326,6 @@ code:
         \hspace*{-3.5mm}TE\textsubscript{t} dimension: 128 \\
         POS\_ID\textsubscript{t} and Phrase\_ID\textsubscript{t} dimension: 1 each; total 2 \\
         ATE\textsubscript{t} dimension = 130 \\
-
         \hspace*{-3.5mm}ATE\textsubscript{t} = \lbrack TE\textsubscript{t} : 
         POS\_ID\textsubscript{t} : Phrase\_ID\textsubscript{t}\rbrack \\
         QE = BiLSTM(ATE) \\
@@ -408,14 +424,15 @@ code:
     \end{enumerate}
     \begin{center}
     \resizebox{8cm}{!} {
-      \begin{tabular}{ | c | c || c | c | }
+      \begin{tabular}{ c | c || c | c }
         \hline
-        \multicolumn{2}{ | c ||}{\multirow{2}{*}{Models}} & \multicolumn{2}{ c | }{Metrics} \\
+        \multicolumn{2}{ c ||}{\multirow{2}{*}{Models}} & \multicolumn{2}{ c }{Metrics} \\
         \cline{3-4}
-        \multicolumn{2}{ | c ||}{} & BLEU & Accu. \\
+        \multicolumn{2}{ c ||}{} & BLEU & Accu. \\
         \hline
-        \multicolumn{2}{ | c ||}{Pengcheng} & 84.5 & 71.6 \\
-        \multicolumn{2}{ | c ||}{Base} & 73.2 & 67.9 \\
+				\hline
+        \multicolumn{2}{ c ||}{Pengcheng} & 84.5 & 71.6 \\
+        \multicolumn{2}{ c ||}{Base} & 73.2 & 67.9 \\
         \hline
         \multirow{4}{*}{NL2code} & BC & 73.6 & 69.4 \\
         & LP & \underline{74.3} & \underline{69.7} \\
