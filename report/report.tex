@@ -4,6 +4,7 @@
 \usepackage[english]{babel}
 \usepackage{amsmath}
 \usepackage{bm}
+\usepackage{listings}
 \usepackage{blindtext}
 \usepackage{multirow}
 \usepackage{graphicx}
@@ -134,13 +135,114 @@
 
     \section{Dataset}
       \subsection{Standard Datasets}
-        \blindtext
+        There are 3 datasets that have been used by the research community for the task
+        of code-generation from the comments/query.
         \subsubsection{Django}
-        \blindtext
-        \subsubsection{HS}
-        \blindtext
+        Django dataset is a collection of 18000 lines of python code from the Opensource
+        web framework, Django. The 18000 code statements have been manually annotated
+        with a Natural language description. As a result of manual annotations, all the
+        annotations are artificially descriptive of the corresponding code. This is
+        the main drawback of the dataset, as the manual annotations rarely reflects
+        the comments that programmers write in production environment. This can be seen
+        in the following example.
+
+      \begin{lstlisting}[frame=single,basicstyle=\small]
+comment:
+  raise and exception InvalidCacheBackendError 
+  with string "Could not find config for '\%s' 
+  in settings.CACHES" as argument , replace ' 
+  \%s ' with alias .
+
+code:
+  raise InvalidCacheBackendError ( "Could not 
+  find config for '\%s' in settings.CACHES" \% 
+  alias )
+      \end{lstlisting}
+
+        \subsubsection{HearthStone}
+        HearthStone dataset is a collection of 600 Python class - description pairs
+        that implement cards for the online multiplayer card game HearthStone.
+        The class - description pairs used to train and test are very similar, in that
+        the any model trained on this dataset would be able to generate only a
+        single template of code, like the one presented in the example. We could not
+        use this dataset as the scope of the dataset very narrow and far from the case
+        in general production environment. 
+
+      \begin{lstlisting}[frame=single,basicstyle=\scriptsize]
+card details:
+  name: ['D', 'i', 'r', 'e', ' ', 
+        'W', 'o', 'l', 'f', ' ', 
+        'A', 'l', 'p', 'h', 'a']
+  cost: ['2']
+  type: ['Minion']
+  rarity: ['Common']
+  race: ['Beast']
+  class: ['Neutral']
+  description: ['Adjacent', 'minions', 'have', 
+        '+', '1', 'Attack', '.']
+  health: ['2']
+  attack: ['2']
+  durability: ['-1']
+
+correspoding code:
+  class DireWolfAlpha(MinionCard):
+    def __init__(self):
+      super().__init__( "Dire Wolf Alpha", 2, 
+        CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, 
+        minion_type=MINION_TYPE.BEAST)
+    def create_minion(self, player):
+      return Minion(2, 2, auras=[Aura(ChangeAttack(1), 
+                          MinionSelector(Adjacent()))])
+      \end{lstlisting}
+
+        \subsubsection{Edinburgh}
+        The Edinburgh dataset is a collection of 200k docstring-code pairs scraped
+        from Opensource python repositories. The docstring-code pairs actually
+        reflect the comments written in production environment. However, the docstring
+        reflects what a particular entity (method, class, function etc.) represents
+        rather than how it is implemented. For the task of generating source code,
+        we need information on implemention logic thus making the dataset unusable
+        for our task.
+
+      \begin{lstlisting}[frame=single,basicstyle=\scriptsize]
+comment:
+  Process elementNode by svgReader.
+
+code:
+  def processSVGElementtext(elementNode, svgReader):
+    if svgReader.yAxisPointingUpward:
+      return
+    fontFamily = getStyleValue('Gentium Basic Regular', 
+        elementNode, 'font-family')
+    fontSize = getRightStripAlphabetPercent(getStyleValue
+        ('12.0', elementNode, 'font-size'))
+    matrixSVG = getChainMatrixSVGIfNecessary(elementNode, 
+        svgReader.yAxisPointingUpward)
+    loopLayer = svgReader.getLoopLayer()
+    translate = euclidean.getComplexDefaultByDictionaryKeys(
+        complex(), elementNode.attributes, 'x', 'y')
+    for textComplexLoop in getTextComplexLoops(fontFamily, 
+      fontSize, elementNode.getTextContent(), 
+      svgReader.yAxisPointingUpward):
+      translatedLoop = []
+      for textComplexPoint in textComplexLoop:
+        translatedLoop.append(textComplexPoint + translate)
+      loopLayer.loops.append(matrixSVG.
+        getTransformedPath(translatedLoop))
+      \end{lstlisting}
+
       \subsection{Our dataset}
-      \blindtext
+        \subsubsection{Scrapped Dataset}
+        We scraped several of the Opensource python repositories from github and
+        collected 12.5k pairs of code-comments after preprocessing the data.
+        We found that the code is very project specific and the descriptions are context specific.
+        This dataset also had the same issue as the Edinburgh dataset as in the descriptions
+        mainly focused on why a code is written rather than how it's written.
+        \subsubsection{Processed Django}
+        Among all the datasets explored, the Django dataset represents the problem
+        of converting NL to source code more accurately. But, as mentioned above
+        the Django dataset is very noise, hence we denoise it (techniques
+        mentioned in data preprocessing) before using it.
 
     \section{Models}
     We describe four models, each is build upon Pengcheng's model, but encodes the input in a 
