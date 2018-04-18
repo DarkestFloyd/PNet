@@ -18,9 +18,9 @@
     \hline
     \textbf{input} & \texttt{remove last element for ANY\_0 .} \\
     \textbf{pred.} & \texttt{ANY\_0 = ANY\_0[:-1]} \\
-    \textbf{remark}& The fact that the model learned to map the token ``last'' in the query to 
-                     ``-1'' in code, tells us that the model has learnt to translate some 
-                     semantics in the input query to code. \\
+    \textbf{remark}& \texttt{The fact that the model learned to map the token ``last'' in the 
+                     query to ``-1'' in code, tells us that the model has learnt to translate some 
+                     semantics in the input query to code.} \\
     \hline
   \end{tabular}
 
@@ -57,14 +57,25 @@
     \textbf{ref.}  & \texttt{ANY\_0 = dict()} \\
     \textbf{pred.} & \texttt{ANY\_0 = \{\}} \\
     \textbf{remark}& \texttt{Here, the model has correctly predicted an empty dictionary, but
-                     the evaluation has missed this. }
+                     the evaluation has missed this. } \\
     \hline
     \textbf{input} & \texttt{ANY\_0 is an list with an element ANY\_1 .} \\
     \textbf{ref.}  & \texttt{ANY\_0 = [ANY\_1]} \\
     \textbf{pred.} & \texttt{ANY\_0 = [ANY\_1]} \\
-    \textbf{remark}& \texttt{Here, the model has correctly predicted an empty dictionary, but
-                     the evaluation has missed this. }
-
+    \textbf{remark}& \texttt{This is the only example where the model has correctly predicted
+                     on a list based query. We hypothesize that this might be because the 
+                     list based queries are generally very long causing the model to forget 
+                     long term dependencies in the code.} \\
+    \hline
+    \textbf{input} & \texttt{substitute ANY\_1 for ANY\_0 , ANY\_4 , ANY\_3 and ANY\_2 , 
+                     respectively .} \\
+    \textbf{ref.}  & \texttt{ANY\_0, ANY\_4, ANY\_3, ANY\_2 = ANY\_1} \\
+    \textbf{pred.} & \texttt{ANY\_0, ANY\_4, ANY\_3, ANY\_2 = ANY\_1} \\
+    \textbf{remark}& \texttt{It is interesting to notice that the model is able to understand
+                     which part of the code fall on the left and right side of the assignment
+                     operator. Also, it correctly places all the variables in their 
+                     proper order. } \\
+    \hline
   \end{tabular}
 
 
