@@ -1,0 +1,71 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\pagenumbering{gobble}
+\usepackage{multirow}
+
+\begin{document}
+
+  \section{Correctly Predicted Examples}
+
+  \begin{tabular}{ l p{0.8\textwidth}}
+    \hline
+		\textbf{input} & \texttt{call the method CLASS\_0 . FUNC\_0 with an argument boolean True .} \\
+    \textbf{pred.} & \texttt{CLASS\_0.FUNC\_0(True)} \\
+    \hline
+		\textbf{input} & \texttt{ANY\_1 is an string STR\_0 formatted with CLASS\_0 . ANY\_0 and 
+                      result of the method CLASS\_0 . FUNC\_0 , respectively .}	\\
+		\textbf{pref.} & \texttt{ANY\_1 = 'STR\_0' \% (CLASS\_0.ANY\_0, CLASS\_0.FUNC\_0())} \\
+    \hline
+    \textbf{input} & \texttt{remove last element for ANY\_0 .} \\
+    \textbf{pred.} & \texttt{ANY\_0 = ANY\_0[:-1]} \\
+    \textbf{remark}& The fact that the model learned to map the token ``last'' in the query to 
+                     ``-1'' in code, tells us that the model has learnt to translate some 
+                     semantics in the input query to code. \\
+    \hline
+  \end{tabular}
+
+  \section{Incorrectly Predicted Examples}
+
+  \begin{tabular}{ l p{0.8\textwidth}}
+    \hline
+		\textbf{input} & \texttt{ANY\_0 is an tuple with 3 elements : None , result of method 
+                     CLASS\_0 . FUNC\_0 and None .} \\
+    \textbf{ref.}  & \texttt{ANY\_0 = None, CLASS\_0.FUNC\_0(), None} \\
+    \textbf{pred.} & \texttt{ANY\_0 = None, (None,), CLASS\_0.None} \\
+    \textbf{remark}& \texttt{A typical form, XXX.YYY appears in code, whenever the user wants to 
+                     express that YYY is an attribute of entity. Here, we hypothesize that the 
+                     model assigned ``None'' as CLASS\_0's attribute due to the period at the end 
+                     of the sentence.} \\
+    \hline
+		\textbf{input} & \texttt{call the function CLASS\_0 . FUNC\_0 -LSB- CLASS\_0 . FUNC\_0 -RSB- 
+                     with 3 arguments : raw string STR\_0 , ANY\_2 and ANY\_0 without the first 
+                     and last element} \\
+    \textbf{ref.}  & \texttt{ANY\_1 = CLASS\_0.FUNC\_0('STR\_0', ANY\_2, ANY\_0[1:-1])} \\
+    \textbf{pred.} & \texttt{ANY\_0 = CLASS\_0.FUNC\_0('STR\_0', ANY\_0 + 1)} \\ 
+    \textbf{remark}& \texttt{We observe that the model typically performs well on short phrases, 
+                     but on long phrases it fails to capture all the nuances expressed in 
+                     different parts of the sentences. In the following example, the model 
+                     completely fails to realise ANY\_0 as a list} \\
+    \hline
+  \end{tabular}
+
+  \section{Interseting finds}
+
+  \begin{tabular}{ l p{0.8\textwidth}}
+    \hline
+    \textbf{input} & \texttt{ANY\_0 is an empty dictionary .} \\
+    \textbf{ref.}  & \texttt{ANY\_0 = dict()} \\
+    \textbf{pred.} & \texttt{ANY\_0 = \{\}} \\
+    \textbf{remark}& \texttt{Here, the model has correctly predicted an empty dictionary, but
+                     the evaluation has missed this. }
+    \hline
+    \textbf{input} & \texttt{ANY\_0 is an list with an element ANY\_1 .} \\
+    \textbf{ref.}  & \texttt{ANY\_0 = [ANY\_1]} \\
+    \textbf{pred.} & \texttt{ANY\_0 = [ANY\_1]} \\
+    \textbf{remark}& \texttt{Here, the model has correctly predicted an empty dictionary, but
+                     the evaluation has missed this. }
+
+  \end{tabular}
+
+
+\end{document}
