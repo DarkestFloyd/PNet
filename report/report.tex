@@ -54,11 +54,11 @@
     \begin{tabular}{c l}
       \multicolumn{2}{ c }{Examples} \\
       \hline
-      input & call the function sorted with argument x \\ 
-      ref. & sorted(x) \\
+      \textbf{input} & call the function sorted with argument x \\ 
+      \textbf{output} & sorted(x) \\
       \hline
-      input & for every k in keys \\
-      ref. & for k in keys: \\
+      \textbf{input} & for every k in keys \\
+      \textbf{output} & for k in keys: \\
       \hline
     \end{tabular}
 
@@ -137,7 +137,7 @@
     \section{Dataset}
       \subsection{Standard Datasets}
         There are 3 datasets that have been used by the research community for the task
-        of code-generation from the comments/query.
+        of code-generation from the comments.
         \subsubsection{Django}
         Django dataset is a collection of 18000 lines of python code from the open source
         web framework, Django. The 18000 code statements have been manually annotated
@@ -246,24 +246,127 @@ code:
         mentioned in data preprocessing) before using it.
 
 				\smallskip
-
 				\begin{center}
-        \begin{tabular}{ l | r }
-					\hline
-          \multicolumn{2}{ c }{Dataset Statistics} \\
-					\hline
-          Maximum comment length       & 133 \\
-					Maximum code length          & 701 \\
-					Average comment length       & 16.0 \\
-					Average code length          & 8.7 \\
-          \hline
-					Vocabulary size - Query      & 2205 \\
-					Vocabulary size - Code       & 814 \\
-					Vocabulary size - POS        & 44 \\
-          Vocabulary size - Phrase     & 14 \\
-					\hline
-        \end{tabular}
+          \begin{tabular}{ l | r }
+            \hline
+            \multicolumn{2}{ c }{Dataset Statistics} \\
+            \hline
+            Maximum comment length       & 133 \\
+            Maximum code length          & 701 \\
+            Average comment length       & 16.0 \\
+            Average code length          & 8.7 \\
+            \hline
+            Vocabulary size - Query      & 2205 \\
+            Vocabulary size - Code       & 814 \\
+            Vocabulary size - POS        & 44 \\
+            Vocabulary size - Phrase     & 14 \\
+            \hline
+          \end{tabular}
 				\end{center}
+
+    \section{Date Preprocessing}
+    In order to add syntax information to the query and make the existing Django
+    dataset as generic as possible, we carried out three preprocessing steps, described below.
+    
+    \subsection{POS tagging}
+    The motivation behind POS tagging the queries/comments is that we believe
+    it would provide invaluable information for the code generator.
+
+    \bigskip
+    \begin{tabular}{ l | l }
+      \hline
+      \multicolumn{2}{c}{Noun/Symbol in Query - Entity in Code} \\
+      \hline
+      \textbf{Query} & Sum a and b // a and b are Nouns \\
+      \textbf{Code}  & a + b \\
+      \hline
+      \multicolumn{2}{c}{Verbs in Query - Strong indicator of user intent} \\
+      \hline
+      \textbf{Query} & Sum a and b // Sum is a verb \\  
+      \textbf{Code}  & a + b // Indicates add, binary operator \\
+      \hline
+      \multicolumn{2}{c}{Prepositions in Query  - Mirrors some keywords} \\
+      \hline
+      \textbf{Query} & if “a” is present in the Alphabets list \\ 
+      \textbf{Code}  & if “a” in Alphabets: \\
+      \hline
+    \end{tabular}
+    \bigskip
+
+    In all the above mentioned examples there is a strong correlation
+    between the POS information in the query and the code generated.
+    Perhaps the most interesting is the correlation between the prepositions
+    and the python language itself, where, as mentioned in the above, the
+    prepositions `if' and `in' are actually keywords in Python. We use
+    NLTK with Stanford parser to extract POS information from the input
+    query.
+
+    \subsection{Phrase Identification}
+    We propose that using phrase chunk information would also be invaluable
+    for the code generator.
+
+    \bigskip
+    \begin{tabular}{ l | p{6.5cm} }
+      \hline
+      \textbf{Query} & ``Add a and b, store results in c'' // ``in c'' is a prepositional phrase \\
+      \textbf{Code}  & c = a + b // ``in c'' indicates a target of the assignment \\
+      \hline
+      \textbf{Query} & ``Call the function get\_data'' // Verb phrase \\ 
+      \textbf{Code}  & get\_data() // entity in verb phrase; could help pointer networks \\
+      \hline
+    \end{tabular}
+    \bigskip
+
+    The above examples explain that the code generator model can leverage
+    the information that a prepositional phrase may contain entities that
+    are the target of an assignment statement and a verb phrase may contain
+    entities that are function calls.
+
+    \subsection{Type Simulation}
+    Python is dynamically typed. That is the runtime determines the types of
+    variables dynamically when the program is executed. The Django dataset
+    in its base form contains a lot of project specific references, which makes
+    the dataset very noisy. We hypothesize that replacing the types of each
+    variable/entity referenced in the comment by its corresponding type
+    would make the dataset very generic.
+
+    \bigskip
+    \begin{tabular}{ l | p{6.5cm} }
+      \hline
+      \multicolumn{2}{c}{Query} \\ 
+      \hline
+      Before & \_\_all\_\_ is a list containing 4 elements : `get\_cache' , `cache' , 
+				`DEFAULT\_CACHE\_ALIAS' , `InvalidCacheBackendError' \\ 
+      After & ANY\_0 is an list containing 4 elements : STR\_1 , STR\_2 , STR\_0 , STR\_4 \\ 
+      \hline
+      \multicolumn{2}{c}{Code} \\
+      \hline
+      Before & \_\_all\_\_ = [`get\_cache’, `cache’, `DEFAULT\_CACHE\_ALIAS’, 
+        `InvalidCacheBackendError’] \\
+      After & ANY\_0 = [ `STR\_1’, `STR\_2’, `STR\_0’, `STR\_4’ ] \\
+      \hline
+    \end{tabular}
+    \bigskip
+
+    From the above example, one could immediately see that, all query/code pairs following the
+    ``create a list of 4 elements'' paradigm will be converted to a generic form as
+    suggested in the example.
+
+    To simulate the types of variables/entities, we used the widely-used python module
+    ``ast''. Using this module we converted the code, in the input query/code pairs to
+    Abstract Syntax Tree (AST) and used a bunch of hand-written rules to identify
+    the types of variables/entities. A few hand-written rules that we used are
+    elaborated in the following figure.
+
+    \begin{itemize}
+      \item Variable that is indexed by a string, is mostly a DICT - d[`key'] = `value'
+      \item Variable that is the ``name'' of a ``Call'' AST node is a FUNCTION
+      \item Variable that is the ``name'' of a ``Attribute'' AST node is a CLASS
+      \item Variable that is the ``attr'' of a ``Attribute'' AST node is either a 
+        CLASS/FUNCTION/NUM/STR
+      \item Anything that appears within quotes in the AST/Query is a STR
+      \item ...
+    \end{itemize}
 
     \section{Models}
     We describe four models, each is built upon Pengcheng's model, but encodes the input in a 
@@ -447,7 +550,16 @@ code:
     \end{center}
 
     \section{Conclusion}
-    \blindtext
+    On top of the existing state-of-the-art model on code generation, we incorporated
+    POS and phrase information of the input query into model, and tested if these
+    additional features improve the effectiveness of the model. We found that the POS
+    and phrase information does improve the BLEU scores by 1\% and accuracy by 2\%. We
+    also did a critical analysis of the datasets available for code-generation and proposed
+    a denoising approach to make one of the datasets (Django dataset) more generic.
+
+    Though, Neural Network approaches give state-of-the-art results, it fails badly on
+    some easy cases as well. Therefore, we believe more inclusion of semantic information
+    and additional features is important and wish to explore it in the future.
 
     \bibliographystyle{ieeetran}
     \bibliography{report}

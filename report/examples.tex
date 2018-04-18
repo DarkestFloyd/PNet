@@ -20,7 +20,10 @@
     \hline
 		\textbf{input} & \texttt{ANY\_1 is an string STR\_0 formatted with CLASS\_0 . ANY\_0 and 
                       result of the method CLASS\_0 . FUNC\_0 , respectively .}	\\
-		\textbf{pref.} & \texttt{ANY\_1 = 'STR\_0' \% (CLASS\_0.ANY\_0, CLASS\_0.FUNC\_0())} \\
+		\textbf{pred.} & \texttt{ANY\_1 = 'STR\_0' \% (CLASS\_0.ANY\_0, CLASS\_0.FUNC\_0())} \\
+    \hline
+    \textbf{input} & \texttt{ANY\_0 is an list with an element ANY\_1 .} \\
+    \textbf{pred.} & \texttt{ANY\_0 = [ANY\_1]} \\
     \hline
     \textbf{input} & \texttt{remove last element for ANY\_0 .} \\
     \textbf{pred.} & \texttt{ANY\_0 = ANY\_0[:-1]} \\
@@ -50,12 +53,12 @@
     \textbf{pred.} & \texttt{ANY\_0 = CLASS\_0.FUNC\_0('STR\_0', ANY\_0 + 1)} \\ 
     \textbf{remark}& \texttt{We observe that the model typically performs well on short phrases, 
                      but on long phrases it fails to capture all the nuances expressed in 
-                     different parts of the sentences. In the following example, the model 
+                     different parts of the sentences. In the above example, the model 
                      completely fails to realise ANY\_0 as a list} \\
     \hline
   \end{tabular}
 
-  \section{Interseting finds}
+  \section{Interesting finds}
 
   \begin{tabular}{ l p{0.8\textwidth}}
     \hline
@@ -64,14 +67,6 @@
     \textbf{pred.} & \texttt{ANY\_0 = \{\}} \\
     \textbf{remark}& \texttt{Here, the model has correctly predicted an empty dictionary, but
                      the evaluation has missed this. } \\
-    \hline
-    \textbf{input} & \texttt{ANY\_0 is an list with an element ANY\_1 .} \\
-    \textbf{ref.}  & \texttt{ANY\_0 = [ANY\_1]} \\
-    \textbf{pred.} & \texttt{ANY\_0 = [ANY\_1]} \\
-    \textbf{remark}& \texttt{This is the only example where the model has correctly predicted
-                     on a list based query. We hypothesize that this might be because the 
-                     list based queries are generally very long causing the model to forget 
-                     long term dependencies in the code.} \\
     \hline
     \textbf{input} & \texttt{substitute ANY\_1 for ANY\_0 , ANY\_4 , ANY\_3 and ANY\_2 , 
                      respectively .} \\
@@ -83,6 +78,5 @@
                      proper order. } \\
     \hline
   \end{tabular}
-
 
 \end{document}
